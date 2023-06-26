@@ -18,7 +18,7 @@ The bare minimum of RAM for the VM is 8GB. The defaults assigned to the VM in th
 
 ## Getting started
 
-Getting the box started is simple. Clone the repository, copy the example configurations, edit them to match your setup and then run `vagrant`.
+Getting the box started is simple. Clone the repository, copy the example configurations, edit them to match your setup and then run `vagrant`. If you have SSH or GPG keys you would like to include, copy them before starting the box.
 
 ```shell
 $ git clone https://github.com/jannfis/argocd-devbox
@@ -27,6 +27,10 @@ $ cp argocd-devbox-config.rb.example argocd-devbox-config.rb
 $ vi argocd-devbox-config.rb
 $ cp config.yaml.example config.yaml
 $ vi config.yaml
+$ # optional, copy your public key to files/ssh_public_keys
+$ cp ~/.ssh/id_rsa.pub files/ssh_public_keys/
+$ # optional, export your public pgp key to files/gpg_public_keys
+$ gpg -a --export mykeyid > files/gpg_public_keys/yourname.asc
 $ vagrant up
 ```
 
@@ -38,7 +42,15 @@ Most of the configuration is then done in `config.yaml`, which sets up variables
 
 Apologies, there's not much documentation but both files should be self-explanatory.
 
-## Configuring local SSH
+### Public GnuPG keys
+
+All files in `files/gpg_public_keys` that match the pattern `*.asc` will be imported into the box's user's public GnuPG keyring.
+
+### Public SSH keys
+
+All files in `files/ssh_public_keys` that match the pattern `*.pub` will be imported into the box's user's `~/.ssh/authorized_keys`
+
+## Configuring local SSH on the host
 
 It's recommended that you make a dedicated configuration entry for the box in your ssh client's configuration:
 
@@ -56,6 +68,52 @@ Host argocd-dev
         StrictHostKeyChecking no
         UserKnownHostsFile /dev/null
 ```
+
+## Starting, stopping, restarting the box
+
+You can start the box by running the following command in the directory where you checked out this repository:
+
+```
+$ vagrant up
+```
+
+Likewise, you can stop it by running
+
+```
+$ vagrant halt
+```
+
+And finally, to restart the box:
+
+```
+$ vagrant reload
+```
+
+## Re-provisioning the box
+
+If configuration has changed, you can re-provision the box without the need for recreating it. To re-provision it, run
+
+```
+$ vagrant --provision --with-provisioner "ansible_local"
+```
+
+Note that not all configuration is idempotent (yet), but it should be a non-destructive action (for example, if you remove a repository from the configuration, this repository will not be removed from the box).
+
+## Deleting and re-creating the box
+
+You can delete the box by running
+
+```
+$ vagrant destroy
+```
+
+and then re-create by running
+
+```
+$ vagrant up
+```
+
+However, keep in mind that all data within the box will be lost upon `vagrant destroy`. You should make sure that you have commited all your code changes and pushed them to a branch in your fork, otherwise, your changes will be gone.
 
 ## Required and recommended VScode plugins
 
