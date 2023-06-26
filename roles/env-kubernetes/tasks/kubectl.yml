@@ -1,0 +1,32 @@
+- name: Install kubectl snap
+  community.general.snap:
+    name: kubectl
+    classic: true
+    channel: stable
+    state: present
+
+- name: Ensure kube config path for user vagrant exists
+  file:
+    path: /home/vagrant/.kube
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+
+- name: Generate kubeconfig
+  shell: 
+    cmd: microk8s.kubectl config view --raw > /home/vagrant/.kube/config
+    creates: /home/vagrant/.kube/config
+
+- name: Ensure kubeconfig is owned by user vagrant
+  file:
+    path: /home/vagrant/.kube/config
+    state: touch
+    owner: vagrant
+    group: vagrant
+    mode: 0600  
+- lineinfile:
+    path: /home/vagrant/.bashrc
+    line: source <(kubectl completion bash)
+    state: present
+  name: Ensure kubectl completion is setup

@@ -1,0 +1,53 @@
+- name: Run go env GOPATH
+  command:
+    cmd: go env GOPATH
+  register: gopath
+
+- name: Run go mod tidy
+  command:
+    cmd: go mod tidy
+    chdir: "$HOME/go/src/github.com/argoproj/argo-cd"
+  become: true
+  become_user: vagrant
+
+- name: Run go mod vendor
+  command:
+    cmd: go mod vendor
+    chdir: "$HOME/go/src/github.com/argoproj/argo-cd"
+  become: true
+  become_user: vagrant
+
+- name: Run go mod vendor
+  command:
+    cmd: go mod vendor
+    chdir: "$HOME/go/src/github.com/argoproj/argo-cd"
+  become: true
+  become_user: vagrant
+
+- name: Install test toolchain
+  command:
+    cmd: make install-test-tools-local
+    chdir: "$HOME/go/src/github.com/argoproj/argo-cd"
+  become: true
+  become_user: vagrant
+
+- name: Install codegen toolchain
+  command:
+    cmd: make install-codegen-tools-local
+    chdir: "$HOME/go/src/github.com/argoproj/argo-cd"
+  become: true
+  become_user: vagrant
+
+- name: Install required Go toolchain
+  command:
+    cmd: make install-go-tools-local
+    chdir: "$HOME/go/src/github.com/argoproj/argo-cd"
+  become: true
+  become_user: vagrant
+
+- name: Install goreman
+  command:
+    cmd: go install github.com/mattn/goreman@latest
+    chdir: "$HOME/go/src/github.com/argoproj/argo-cd"
+  become: true
+  become_user: vagrant

@@ -1,0 +1,6 @@
+---
+# tasks file for roles/env-argocd
+- include_tasks: shell.yml
+- include_tasks: env.yml
+- include_tasks: deps.yml
+- include_tasks: tools.yml

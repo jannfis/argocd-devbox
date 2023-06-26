@@ -1,0 +1,3 @@
+---
+# tasks file for roles/env-argocd-dev
+- include_tasks: git.yml

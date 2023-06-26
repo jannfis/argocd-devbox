@@ -1,0 +1,4 @@
+- include_tasks: microk8s.yml
+- include_tasks: kubectl.yml
+- include_tasks: kubectx.yml
+- include_tasks: kustomize.yml

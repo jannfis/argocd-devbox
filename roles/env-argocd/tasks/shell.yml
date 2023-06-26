@@ -1,0 +1,22 @@
+- name: Ensure cdargo alias is set up correctly
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^alias cdargo\='
+    line: "alias cdargo='cd ~/go/src/github.com/argoproj/argo-cd'"
+  become: true
+  become_user: vagrant
+
+- name: Figure out GOPATH
+  command:
+    cmd: go env GOPATH
+  register: gopath
+  become: true
+  become_user: vagrant
+
+- name: Ensure GOPATH is set correctly
+  lineinfile:
+    path: ~/.bashrc
+    regexp: '^export GOPATH='
+    line: "export GOPATH={{ gopath.stdout_lines[0] }}"
+  become: true
+  become_user: vagrant

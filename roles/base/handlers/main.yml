@@ -1,0 +1,6 @@
+---
+# handlers file for roles/base
+- name: sshd_restart
+  systemd:
+    name: sshd
+    state: restarted

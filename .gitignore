@@ -1,0 +1,7 @@
+.vagrant/
+.vscode/
+argocd-dev-config.rb
+config.yaml
+files/gpg_public_keys/*
+files/ssh_public_keys/*
+files/vscode/*

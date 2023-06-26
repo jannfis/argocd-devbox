@@ -1,0 +1,7 @@
+- name: Install general tools
+  dnf:
+    name:
+    - vim
+    - podman
+    - podman-docker
+    state: present

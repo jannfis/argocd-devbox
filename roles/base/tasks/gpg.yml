@@ -1,0 +1,20 @@
+- name: Ensure GnuPG packages are installed
+  dnf:
+    name: [gnupg2,gnupg2-smime]
+    state: present
+
+- name: Ensure all public keys are imported for the user
+  command:
+    cmd: "gpg --import {{ item }}"
+  with_fileglob: 'files/gpg_public_keys/*.asc'
+  become: true
+  become_user: vagrant
+
+- name: Ensure GnuPG agent is set up correctly for user
+  systemd:
+    name: gpg-agent.socket
+    scope: user
+    enabled: true
+    state: started
+  become: true
+  become_user: vagrant

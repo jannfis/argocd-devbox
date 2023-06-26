@@ -1,0 +1,5 @@
+collections:
+- community.crypto
+- name: community.general
+  version: "==7.0.1"
+

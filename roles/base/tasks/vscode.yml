@@ -1,0 +1,8 @@
+- name: Ensure vscode workspaces are in place
+  copy:
+    src: "{{ item }}"
+    dest: "$HOME/"
+    mode: 0644
+  become: true
+  become_user: vagrant
+  with_fileglob: "files/vscode/*.code-workspace"

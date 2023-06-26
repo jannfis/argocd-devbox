@@ -1,0 +1,16 @@
+- name: Install snapd and dependencies
+  ansible.builtin.dnf:
+    name: [snapd, squashfuse, squashfs-tools]
+    state: present
+
+- name: Ensure snapd is enabled at boot time
+  systemd:
+    name: snapd
+    state: started
+    enabled: true
+
+- name: Ensure classic confinement is enabled
+  file:
+    src: /var/lib/snapd/snap
+    dest: /snap
+    state: link

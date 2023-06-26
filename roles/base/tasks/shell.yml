@@ -1,0 +1,22 @@
+- name: Clone bash-git-prompt repository
+  command:
+    cmd: git clone https://github.com/magicmonty/bash-git-prompt.git /home/vagrant/.bash-git-prompt --depth=1
+    creates: /home/vagrant/.bash-git-prompt/.git
+
+- name: Install bash-git-prompt to user's shell
+  blockinfile:
+    path: /home/vagrant/.bashrc
+    block: |
+      if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
+        GIT_PROMPT_ONLY_IN_REPO=1
+        source $HOME/.bash-git-prompt/gitprompt.sh
+      fi
+    marker: "# {mark} GIT PROMPT BLOCK"
+
+- name: Setup user's path correctly
+  blockinfile:
+    path: /home/vagrant/.bashrc
+    block: |
+      PATH=$HOME/go/src/github.com/argoproj/argo-cd/dist:$HOME/bin:$HOME/go/bin:$PATH
+      export PATH
+    marker: "# {mark} PATH BLOCK"

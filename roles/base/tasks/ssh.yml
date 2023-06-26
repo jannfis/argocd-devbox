@@ -1,0 +1,30 @@
+- set_fact:
+    PubKeys: []
+
+- name: Find all public keys to deploy
+  set_fact:
+    PubKeys: "{{ PubKeys + [item] }}"
+  with_fileglob: 'files/ssh_public_keys/*.pub'
+
+- name: Copy all public keys into box
+  ansible.posix.authorized_key:
+    user: vagrant
+    state: present
+    key: "{{ item }}"
+  with_file: "{{ PubKeys }}"
+
+- name: Ensure SSHD is configured correctly
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^StreamLocalBindUnlink\ '
+    line: "StreamLocalBindUnlink yes"
+  notify:
+    - sshd_restart
+
+- name: Ensure SSHD is not using DNS lookup for incoming connections
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: '^UseDNS\ '
+    line: "UseDNS no"
+  notify:
+    - sshd_restart

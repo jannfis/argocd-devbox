@@ -1,0 +1,114 @@
+- name: Ensure git is installed
+  dnf:
+    name: git
+    state: present
+
+- name: Read currently configured Git username
+  command:
+    cmd: git config --get --global user.name
+  become: true
+  become_user: vagrant
+  register: git_user_name
+  changed_when: false
+  failed_when: false
+
+- name: Read currently configured Git username
+  command:
+    cmd: git config --get --global user.email
+  become: true
+  become_user: vagrant
+  register: git_user_email
+  changed_when: false
+  failed_when: false
+
+- name: Read currently configured Git username
+  command:
+    cmd: git config --get --global user.signingKey
+  become: true
+  become_user: vagrant
+  register: git_user_signing_key
+  changed_when: false
+  failed_when: false
+
+- name: "Ensure Git username is set up"
+  shell:
+    cmd: |
+      git config --global user.name "{{ git.config.user_name }}"
+  become: true
+  become_user: vagrant
+  when: git.config is defined and git.config.user_name != git_user_name.stdout_lines[0]
+
+- name: "Ensure Git email is set up"
+  shell:
+    cmd: |
+      git config --global user.email "{{ git.config.user_email }}"
+  become: true
+  become_user: vagrant
+  when: git.config is defined and git.config.user_email != git_user_email.stdout_lines[0]
+
+- name: "Ensure Git signing key is setup"
+  shell:
+    cmd: |
+      git config --global user.signingKey "{{ git.config.signing_key }}"
+  become: true
+  become_user: vagrant
+  when: git.config is defined and git.config.signing_key != git_user_signing_key.stdout_lines[0]
+
+- name: Fetch SSH known hosts file
+  get_url:
+    url: https://raw.githubusercontent.com/argoproj/argo-cd/master/hack/ssh_known_hosts
+    dest: /home/vagrant/.ssh/known_hosts
+    owner: vagrant
+    group: vagrant
+    mode: 0600
+
+- name: Ensure all base paths exists
+  file:
+    path: '{{ item.path | dirname }}'
+    state: directory
+    owner: vagrant
+    group: vagrant
+  with_items: '{{ git.repositories }}'
+  when: git.repositories is defined
+
+- name: Checkout all repositories
+  command:
+    cmd: 'git clone {{ item.url }} {{ item.path }}'
+    creates: '{{ item.path }}/.git'
+  with_items: '{{ git.repositories }}'
+  become: true
+  become_user: vagrant
+  when: git.repositories is defined
+
+- name: Get all Git remotes
+  command:
+    cmd: git remote -v
+    chdir: "{{ item.0.path }}"
+  register: gitremotes
+  loop: "{{ git.repositories | subelements('remotes') }}"
+  become: true
+  become_user: vagrant
+  when: git.repositories is defined
+
+- name: Dump all remotes
+  debug:
+    var: gitremotes
+  when: git.repositories is defined
+
+- name: Setup all Git remotes across all repositories
+  shell:
+    cmd: "git remote remove {{ item.1.name}}; git remote add -f {{ item.1.name}} {{ item.1.url }}"
+    chdir: "{{ item.0.path }}"
+  loop: "{{ git.repositories | subelements('remotes') }}"
+  become: true
+  become_user: vagrant
+  when: git.repositories is defined
+
+- name: Pull changes from upstream
+  shell:
+    cmd: "git pull {{ item.1.name }} {{ item.0.default_branch }}"
+    chdir: "{{ item.0.path }}"
+  loop: "{{ git.repositories | default([]) | subelements('remotes') }}"
+  become: true
+  become_user: vagrant
+  when: git.repositories is defined

@@ -1,0 +1,15 @@
+- hosts: all
+  name: Set up Argo CD dev box
+  roles:
+  - name: base
+    tags:
+    - base
+  - name: env-kubernetes
+    tags:
+    - kubernetes
+  - name: env-git-dev
+    tags:
+    - git
+  - name: env-argocd
+    tags:
+    - argocd

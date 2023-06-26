@@ -1,0 +1,28 @@
+- name: Install Golang
+  dnf:
+    name: golang
+    state: present
+
+- name: Ensure that Go SDK directories exist for the user
+  file:
+    path: /home/vagrant/sdk
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+
+- name: Download Go versions
+  command:
+    cmd: go install golang.org/dl/go{{ item }}@latest
+    creates: /home/vagrant/go/bin/go{{item}}
+  with_items: "{{ golang.versions }}"
+  become: true
+  become_user: vagrant
+
+- name: Install Go versions
+  command:
+    cmd: /home/vagrant/go/bin/go{{ item }} download
+    creates: /home/vagrant/sdk/go{{item}}/bin/go
+  with_items: "{{ golang.versions }}"
+  become: true
+  become_user: vagrant

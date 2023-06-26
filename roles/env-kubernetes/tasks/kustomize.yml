@@ -1,0 +1,11 @@
+- get_url:
+    url: https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2Fv3.9.1/kustomize_v3.9.1_linux_amd64.tar.gz
+    dest: /tmp/kustomize.tar.gz
+    checksum: sha256:0fb2c3299ca3668205eac3a3a5be9a8e4a79d7c4fba18542a6c444e0d33ddbdd
+  name: Fetch Kustomize from GitHub
+- unarchive:
+    src: /tmp/kustomize.tar.gz
+    dest: /usr/local/bin
+    mode: 0755
+    creates: /usr/local/bin/kustomize
+  name: Extract Kustomize binary
