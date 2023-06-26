@@ -3,6 +3,8 @@
 
 vm_ipaddr='192.168.56.2'
 ansible_debug=false
+vm_ram=16192
+vm_cpus=4
 tags = ENV['ANSIBLE_TAGS'] || ""
 
 require './argocd-devbox-config.rb' if File.exists?('argocd-devbox-config.rb')
@@ -29,8 +31,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider "virtualbox" do |vb|
     vb.name = "argocd-dev"
-    vb.memory = "16384"
-    vb.cpus = 4
+    vb.memory = vm_ram
+    vb.cpus = vm_cpus
   end
   
   config.ssh.forward_agent = true

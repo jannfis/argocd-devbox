@@ -1,3 +1,7 @@
+# RAM to assign to the VM, in MB.
+vm_ram=16192
+# Number of CPUs to assign to the VM
+vm_cpus=4
 # IP address for the box. Needs to be in a range allowed by VirtualBox
 vm_ipaddr='192.168.56.2'
 # When ansible_debug is true, ansible execution will be more verbose
