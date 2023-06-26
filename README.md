@@ -6,6 +6,32 @@ I thought it might be useful to other (emerging) Argo CD contributors as well to
 
 If you submit enhancement requests, bug reports or pull requests to this repository, please do not expect any of them to be considered. The target audience of this box is mainly myself and my own development workflow. I'll happily accept contributions that I think would be great additions to my workflow, while I will not accept those that I don't see fit. Feel free to clone this box and adapt it to your own workflow, though.
 
+## What's in it?
+
+### Go SDKs
+
+There's various Go SDKs in `~/sdk` plus the latest Go version from Fedora.
+
+### Argo CD & toolchain
+
+The provisioning of the box includes cloning the Argo CD repository from your own fork and setting up the required Argo CD development toolchain. Please make sure that the default branch of your fork is up-to-date with the lastest code in Argo CD's default branch, so that your toolchain will be up-to-date after provisioning.
+
+Instead of Docker, the box installs `podman` with the `podman-docker` CLI.
+
+After provisioning, you'll be able to run things like `make test-local`, `make start-e2e-local` and `make codegen` out-of-the-box.
+
+The Argo CD source code will be cloned into `~/go/src/github.com/argoproj/argo-cd`. For convenience, an alias `cdargo` is setup in the login shell that will switch to that directory.
+
+### Git configuration
+
+Git will be configured with a provided username, email address and (optionally) your PGP configuration. The provisioner will add any public GnuPG keys you drop into `files/gpg_public_keys` to the GnuPG keyring on the box and set up everything for forwarding `gpg-agent` connections through SSH.
+
+In the box's configuration file, you can specify additional repositories to be cloned into the box, along with any remote(s) that should be set-up for them.
+
+### Kubernetes
+
+The box installs the stable version of `microk8s` via snap and sets up the box's user's kubeconfig accordingly. Additionally, tools such as `kubens` and `kubectx` will be installed for purposes of convenience.
+
 ## License
 
 All code within this repository is released to the Public Domain under the [Unlicense](LICENSE).
