@@ -5,42 +5,21 @@ git:
     signing_key: F2EE1CEC01DBEE2
   repositories:
   - name: argo-cd
-    url: git@github.com:jannfis/argo-cd
+    url: git@github.com:{{ github.username }}/argo-cd
     path: $HOME/go/src/github.com/argoproj/argo-cd
     default_branch: master
     remotes:
     - name: upstream
       url: https://github.com/argoproj/argo-cd
   - name: gitops-engine
-    url: git@github.com:jannfis/gitops-engine
+    url: git@github.com:{{ github.username }}/gitops-engine
     path: $HOME/go/src/github.com/argoproj/gitops-engine
     default_branch: master
     remotes:
     - name: upstream
       url: https://github.com/argoproj/gitops-engine
-  - name: argocd-image-updater
-    url: git@github.com:jannfis/argocd-image-updater
-    path: $HOME/src/argocd-image-updater
-    default_branch: master
-    remotes:
-    - name: upstream
-      url: https://github.com/argoproj-labs/argocd-image-updater
-  - name: argocd-operator
-    url: git@github.com:jannfis/argocd-operator
-    path: $HOME/src/argocd-operator
-    default_branch: master
-    remotes:
-    - name: upstream
-      url: https://github.com/argoproj-labs/argocd-operator
-  - name: gitops-operator
-    url: git@github.com:jannfis/gitops-operator
-    path: $HOME/src/gitops-operator
-    default_branch: master
-    remotes:
-    - name: upstream
-      url: https://github.com/redhat-developer/gitops-operator
   - name: argoproj-pkg
-    url: git@github.com:jannfis/argo-pkg
+    url: git@github.com:{{ github.username }}/argo-pkg
     path: $HOME/go/src/github.com/argoproj/pkg
     default_branch: master
     remotes:
