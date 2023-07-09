@@ -7,7 +7,7 @@ vm_ram=16192
 vm_cpus=4
 tags = ENV['ANSIBLE_TAGS'] || ""
 
-require './argocd-devbox-config.rb' if File.exists?('argocd-devbox-config.rb')
+require './argocd-devbox-config.rb' if File.exist?('argocd-devbox-config.rb')
 
 Vagrant.configure("2") do |config|
   config.vm.box = "fedora/38-cloud-base"
