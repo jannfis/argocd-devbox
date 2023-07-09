@@ -36,7 +36,7 @@
       git config --global user.name "{{ git.config.user_name }}"
   become: true
   become_user: vagrant
-  when: git.config is defined and git.config.user_name != git_user_name.stdout_lines[0]
+  when: git.config is defined and git.config.user_name != git_user_name.stdout
 
 - name: "Ensure Git email is set up"
   shell:
@@ -44,7 +44,7 @@
       git config --global user.email "{{ git.config.user_email }}"
   become: true
   become_user: vagrant
-  when: git.config is defined and git.config.user_email != git_user_email.stdout_lines[0]
+  when: git.config is defined and git.config.user_email != git_user_email.stdout
 
 - name: "Ensure Git signing key is setup"
   shell:
@@ -52,7 +52,7 @@
       git config --global user.signingKey "{{ git.config.signing_key }}"
   become: true
   become_user: vagrant
-  when: git.config is defined and git.config.signing_key != git_user_signing_key.stdout_lines[0]
+  when: git.config is defined and git.config.signing_key != git_user_signing_key.stdout
 
 - name: Fetch SSH known hosts file
   get_url:
