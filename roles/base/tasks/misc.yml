@@ -5,3 +5,20 @@
     - podman
     - podman-docker
     state: present
+
+- name: Get selinux state
+  command:
+    cmd: getenforce
+  register: getenforce
+  changed_when: false
+
+- name: Set selinux to disabled
+  command:
+    cmd: setenforce 0
+  when: getenforce.stdout == "Enforcing"
+
+- name: Permanently set selinux to disabled
+  lineinfile:
+    path: /etc/sysconfig/selinux
+    regexp: ^SELINUX=
+    line: SELINUX=disabled
